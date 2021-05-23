@@ -8,7 +8,7 @@ resource "time_static" "t" {}
 
 resource "aws_s3_bucket" "fb" {
   bucket = "fb${var.bucket_name}"
-  acl = "public-read"
+  #acl = "public-read"
 }
 
 resource "aws_s3_bucket_object" "test1" {
