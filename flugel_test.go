@@ -6,11 +6,10 @@ import (
 	"testing"
   "time"
   "crypto/tls"
+  "strconv"
 
-//	"github.com/gruntwork-io/terratest/modules/aws"
 	"github.com/gruntwork-io/terratest/modules/random"
 	"github.com/gruntwork-io/terratest/modules/terraform"
-//	"github.com/stretchr/testify/assert"
   http_helper "github.com/gruntwork-io/terratest/modules/http-helper"
 )
 
@@ -35,11 +34,6 @@ func TestTerraformAwsS3Example(t *testing.T) {
 		Vars: map[string]interface{}{
 			"bucket_name": expectedName,
 		},
-
-		// Environment variables to set when running Terraform
-		//EnvVars: map[string]string{
-	  //		"AWS_DEFAULT_REGION": awsRegion,
-		//},
 	})
 
 	// At the end of the test, run `terraform destroy` to clean up any resources that were created
@@ -51,9 +45,14 @@ func TestTerraformAwsS3Example(t *testing.T) {
 	// Run `terraform output` to get the value of an output variable
 	bucketDomain := terraform.Output(t, terraformOptions, "bucket_domain")
 
+  // Get timestamp used by terraform to write the files
   expectedTimeStamp := terraform.Output(t, terraformOptions, "bucket_objects_time")
 
+  // TLS empty configo to http_helper
   tlsConfig := tls.Config{}
 
-  http_helper.HttpGetWithRetry(t, "https://" + bucketDomain + "/test1.txt", &tlsConfig, 200, expectedTimeStamp, 3, 5 * time.Second)
+  // HTTP request to check the content of each file
+  for i := 1; i < 3; i++ {
+    http_helper.HttpGetWithRetry(t, "https://" + bucketDomain + "/test" + strconv.Itoa(i) + ".txt", &tlsConfig, 200, expectedTimeStamp, 3, 5 * time.Second)
+	}
 }
