@@ -28,7 +28,10 @@ resource "aws_instance" "web" {
   instance_type = "t2.micro"
   user_data = data.template_file.userdata.rendered
   key_name = "nachor_key"
-  vpc_security_group_ids = ["sg-acc556c7"]
+  subnet_id = aws_subnet.main.id
+  vpc_security_group_ids = ["${aws_security_group.http-https-allowed.id}"]
+  #depends on internet gateway
+  #depends_on = [aws_internet_gateway.gw]
 }
 
 ##outputs
