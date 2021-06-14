@@ -37,6 +37,7 @@ write_files:
             loadBalancer:
               passHostHeader: false
               servers:
-              - url: "http://${ec2_domain_name}"
+              - url: "http://${ec2_domain_name_0}"
+              - url: "http://${ec2_domain_name_1}"
 runcmd:
   - docker-compose -f /opt/docker-compose.yaml up -d
