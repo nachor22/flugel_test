@@ -18,7 +18,8 @@ data "aws_ami" "ubuntu" {
 data "template_file" "ud-lb" {
   template = file("userdata/userdata_traefik.yaml")
   vars = {
-    ec2_domain_name = aws_instance.web01.private_dns
+    ec2_domain_name_0 = aws_instance.web[0].private_dns
+    ec2_domain_name_1 = aws_instance.web[1].private_dns
   }
 }
 
@@ -41,8 +42,9 @@ resource "aws_instance" "lb" {
   #depends_on = [aws_internet_gateway.gw]
 }
 
-resource "aws_instance" "web01" {
+resource "aws_instance" "web" {
   ami           = data.aws_ami.ubuntu.id
+  count = 2
   instance_type = "t2.micro"
   user_data = data.template_file.ud-web.rendered
   key_name = "nachor_key"
