@@ -1,0 +1,19 @@
+#cloud-config
+package_update: true
+packages:
+  - docker.io
+  - docker-compose
+write_files:
+  - path: /opt/docker-compose.yaml
+    content: |
+      version: "3"
+      services:
+        s3_proxy:
+          image: pottava/s3-proxy
+          environment:
+            - AWS_S3_BUCKET=${s3_bucket_name}
+            - AWS_REGION=us-east-2
+          ports:
+            - "80:80"
+runcmd:
+  - docker-compose -f /opt/docker-compose.yaml up -d
