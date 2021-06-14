@@ -53,6 +53,6 @@ func TestTerraformAwsS3Example(t *testing.T) {
 
   // HTTP request to check the content of each file
   for i := 1; i < 3; i++ {
-    http_helper.HttpGetWithRetry(t, "http://" + lbDomain + "/s3/test" + strconv.Itoa(i) + ".txt", &tlsConfig, 200, expectedTimeStamp, 6, 15 * time.Second)
+    http_helper.HttpGetWithRetry(t, "http://" + lbDomain + "/s3/test" + strconv.Itoa(i) + ".txt", &tlsConfig, 200, expectedTimeStamp, 8, 15 * time.Second)
 	}
 }
