@@ -15,14 +15,12 @@ resource "aws_s3_bucket_object" "test1" {
   bucket = aws_s3_bucket.fb.id
   key = "test1.txt"
   content = time_static.t.rfc3339
-#  acl = "public-read"
 }
 
 resource "aws_s3_bucket_object" "test2" {
   bucket = aws_s3_bucket.fb.id
   key = "test2.txt"
   content = time_static.t.rfc3339
-#  acl = "public-read"
 }
 
 ##outputs

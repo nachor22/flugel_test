@@ -38,8 +38,6 @@ resource "aws_instance" "lb" {
   key_name = "nachor_key"
   subnet_id = aws_subnet.main.id
   vpc_security_group_ids = ["${aws_security_group.lb.id}"]
-  #depends on internet gateway
-  #depends_on = [aws_internet_gateway.gw]
 }
 
 resource "aws_instance" "web" {
@@ -51,8 +49,6 @@ resource "aws_instance" "web" {
   subnet_id = aws_subnet.main.id
   vpc_security_group_ids = ["${aws_security_group.web.id}"]
   iam_instance_profile = "${aws_iam_instance_profile.prof.name}"
-  #depends on internet gateway
-  #depends_on = [aws_internet_gateway.gw]
 }
 
 ##outputs

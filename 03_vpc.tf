@@ -27,6 +27,7 @@ resource "aws_route_table_association" "rt-subnet"{
     route_table_id = aws_route_table.rt.id
 }
 
+##security groups
 resource "aws_security_group" "lb" {
     vpc_id = aws_vpc.main.id
     
