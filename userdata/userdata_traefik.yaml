@@ -1,0 +1,43 @@
+#cloud-config
+package_update: true
+packages:
+  - docker.io
+  - docker-compose
+write_files:
+  - path: /opt/docker-compose.yaml
+    content: |
+      version: "3"
+      services:
+        traefik:
+          image: traefik:v2.4
+          environment:
+            - TRAEFIK_PROVIDERS_FILE_FILENAME=/etc/traefik/dynamic.yaml
+          ports:
+            - "80:80"
+          volumes:
+            - "./dynamic.yaml:/etc/traefik/dynamic.yaml"
+  - path: /opt/dynamic.yaml
+    content: |
+      http:
+        routers:
+          to-site:
+            rule: "PathPrefix(`/s3`)"
+            middlewares:
+              - site-stripprefix
+            service: s3
+      
+        middlewares:
+          site-stripprefix:
+            stripPrefix:
+              prefixes:
+                - "/s3"
+      
+        services:
+          s3:
+            loadBalancer:
+              passHostHeader: false
+              servers:
+              - url: "http://${ec2_domain_name_0}"
+              - url: "http://${ec2_domain_name_1}"
+runcmd:
+  - docker-compose -f /opt/docker-compose.yaml up -d

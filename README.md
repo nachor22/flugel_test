@@ -1,9 +1,15 @@
 # Flugel evaluation test
 
-Terraform module that creates an AWS S3 bucket with two files: `test1.txt` and `test2.txt`. The content of these files is the timestamp when the code was executed.
+Terraform code that creates:
+- Private S3 bucket with two files: `test1.txt` and `test2.txt`. The content of these files is the timestamp when the code was executed.
+- An EC2 instance running Traefik as LB
+- Two EC2 instances, behind the LB, that serve the files from the S3 bucket using `s3-proxy`
+- Every instances are created in a new VPC with only a public subnet
+- S3 bucket is only accesible by EC2 instances using IAM Role
+- The LB routes the `/s3` path to the S3 bucket
+- Files are reachable through the LB port 80. ie: `http://LB_DNS_NAME/s3/file1.txt`
 
 It also includes `flugel_test.go` to test the module with Terratest, which is triggered on every push/PR by Github Actions
-
 
 ### Running automated test
 - Terraform installed
