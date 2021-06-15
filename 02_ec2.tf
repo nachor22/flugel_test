@@ -35,7 +35,7 @@ resource "aws_instance" "lb" {
   ami           = data.aws_ami.ubuntu.id
   instance_type = "t2.micro"
   user_data = data.template_file.ud-lb.rendered
-  key_name = "nachor_key"
+  key_name = "flugel_key"
   subnet_id = aws_subnet.main.id
   vpc_security_group_ids = ["${aws_security_group.lb.id}"]
 }
@@ -45,7 +45,7 @@ resource "aws_instance" "web" {
   count = 2
   instance_type = "t2.micro"
   user_data = data.template_file.ud-web.rendered
-  key_name = "nachor_key"
+  key_name = "flugel_key"
   subnet_id = aws_subnet.main.id
   vpc_security_group_ids = ["${aws_security_group.web.id}"]
   iam_instance_profile = "${aws_iam_instance_profile.prof.name}"
